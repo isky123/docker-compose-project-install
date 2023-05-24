@@ -1,0 +1,26 @@
+version: '3.3'
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+services:
+  #招商云
+  tsl-invest-web:
+    build: nginx/.
+    container_name: tsl-invest-web
+    networks:
+      - sjs-net
+    ports:
+      - "9018:80"
+    env_file:
+      - common.env
+    volumes:
+      - ./tsl-invest-web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+
+

@@ -1,0 +1,92 @@
+version: '3.3'
+services:
+  tsl-devgateway:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devgateway
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-gateway.jar:/app/app.jar
+  tsl-devauth:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devauth
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-auth.jar:/app/app.jar
+  tsl-devadmin:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devadmin-server
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-admin-server.jar:/app/app.jar
+
+  tsl-devmessage-marge:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devmessage-marge
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-message-server.jar:/app/app.jar
+
+  tsl-devoss-marge:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devoss-marge
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-oss-server.jar:/app/app.jar
+
+
+  #后端业务服务
+  tsl-devynpower-model-java:
+    image: tsl_jdk8_256:2.0
+    container_name: tsl-devynpower-model-java
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./serverjar/tsl-ynpower-server.jar:/app/app.jar
+    extra_hosts:
+      - "kafka1:47.103.49.13"
+      - "kafka2:47.103.49.13"
+      - "kafka3:47.103.49.13"
+
+
+
+
+  #前端服务
+  tsl-power-web:
+    image: tsl_web:2.0
+    container_name: tsl-power-web
+    networks:
+      - sjs-net
+    ports:
+      - "9110:80"
+      - "9109:9109"
+    env_file:
+      - common.env
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./tsl-power-web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+

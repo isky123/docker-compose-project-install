@@ -1,0 +1,31 @@
+version: '3.5'
+services:
+  timescaledb-tsl:
+    image: timescale/timescaledb:2.3.1-pg12
+    container_name: tsl-timescaledb
+    restart: unless-stopped
+    ports:
+      - 9003:5432
+    networks:
+      - sjs-net
+    environment:
+      POSTGRES_PASSWORD: Sjs.379=
+      LANG: "C.UTF-8"
+      TZ: Asia/Shanghai
+      PGTZ: Asia/Shanghai
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ./data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=10800"
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
