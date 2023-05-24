@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx_web:           
+    container_name: nginx_web
+    image: nginx 
+    restart: always
+    ports:
+     - 18080:18080
+    networks:
+     - sjs-net
+    volumes:
+     - ./dist:/nginx/dist
+     - ./conf:/etc/nginx/conf.d
+     - ./log:/var/log/nginx
+    environment:
+     - TZ=Asia/Shanghai
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true

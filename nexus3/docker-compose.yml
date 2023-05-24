@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  nexus3:
+    image: sonatype/nexus3
+    container_name: basic-nexus
+    restart: always
+    ports:
+      - 38081:8081
+    volumes:
+      - ./nexus-data:/nexus-data
+
+
+
+

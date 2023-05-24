@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:10.6
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    restart: always
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud # 这里配置一个非root账户给nextcloud使用
+      - MYSQL_PASSWORD=nextcloud # 这里配置上面那个账号的密码
+    ports:
+      - 33306:3306
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 36379:6379
+    command: "redis-server --requirepass 123456 --appendonly yes"
+    restart: always
+    volumes:
+      - ./redis/data:/data
+      # 替换容器内redis.conf
+      - ./reids/conf/redis.conf:/usr/local/etc/redis/redis.conf
+
+  app:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - ./app/html:/var/www/html
+      - ./app/data:/var/www/html/data
+      - ./app/config:/var/www/html/config
+      - ./app/custom_apps:/var/www/html/custom_apps
+    environment:
+      - MYSQL_HOST=db
+      - REDIS_HOST=redis
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+      - redis
+
+  proxy: # 叫做proxy是因为是作为代理来提供服务
+    image: nginx
+    restart: unless-stopped
+    expose:
+      - "80"
+    ports:
+    # ports可将容器内的端口映射到宿主机上
+    # 这里是将容器的443端口映射到宿主机的7788端口
+      - 7788:8083
+    volumes:
+      - ./app/html:/var/www/html
+      - ./proxy/conf.d:/etc/nginx/conf.d:ro
+      - ./proxy/ssl_certs:/etc/nginx/ssl_certs:ro
+    links:
+      - app:app
+    depends_on:
+      - app

@@ -1,0 +1,51 @@
+version: '3'
+services:
+  mysql:
+    hostname: mysql8
+    image: mysql:8.0.28
+    container_name: mysql8.28 # 指定容器名称，如果不设置此参数，则由系统自动生成
+    restart: unless-stopped # 设置容器自启模式
+    networks:
+      - sjs-net
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin # 设置utf8字符集
+    environment:
+      - TZ=Asia/Shanghai # 设置容器时区与宿主机保持一致
+      - MYSQL_ROOT_PASSWORD=123456 # 设置root密码
+    volumes:
+      - "./data:/var/lib/mysql"
+      - "./conf:/etc/mysql/conf.d"
+    ports:
+      - "3306:3306"
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+# version: '3'
+# services:
+#   mysql-tsl:
+#     hostname: mysql
+#     image: mysql:5.7.35
+#     container_name: tsl-mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
+#     restart: unless-stopped # 设置容器自启模式
+#     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin # 设置utf8字符集
+#     networks:
+#       - sjs-net
+#     environment:
+#       - TZ=Asia/Shanghai # 设置容器时区与宿主机保持一致
+#       - MYSQL_ROOT_PASSWORD=Sjs.379= # 设置root密码
+#     volumes:
+#       - "./data:/var/lib/mysql"
+#       - "./conf:/etc/mysql/conf.d"
+#     ports:
+#       - "3306:3306"
+
+# #自定义网络
+# networks:
+#   sjs-net:
+#     external: true
+
+
