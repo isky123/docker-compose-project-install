@@ -1,0 +1,38 @@
+# 安装完成容器内执行测试命令：clickhouse-client
+# CREATE DATABASE test
+# CREATE TABLE t_user (id Int16, name String, gender String, phone String) ENGINE=Memory;
+# INSERT INTO t_user VALUES (1, 'james', 'male', '10010'), (2, 'zhanglaosan', 'male', '10086');
+version: '3'
+services:
+  clickhouse:
+    image: yandex/clickhouse-server
+    container_name: clickhouse
+    # user: root
+    # privileged: true
+    ports:
+      #<!-- 通过url访问clickhouse的端口号：8123 -->
+      - "8123:8123"
+      #<!-- 通过tcp访问clickhouse的端口号：9000 -->
+      - "9000:9000"
+      #<!-- 通过mysql访问clickhouse的端口号：9004，比如：mysql -h 10.15.11.2 -P9004 -u seluser -p meiyoumima -->
+      - "9004:9004"
+    networks:
+      - sjs-net
+    volumes:
+      - ./data/:/var/lib/clickhouse
+      - ./log/:/var/log/
+      - ./config.xml:/etc/clickhouse-server/config.xml:rw
+      - ./users.xml:/etc/clickhouse-server/users.xml:rw
+    environment:
+      - TZ=Asia/Shanghai
+      # - ALLOW_EMPTY_PASSWORD=no
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+

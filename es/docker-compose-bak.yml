@@ -1,0 +1,21 @@
+version: "2"
+services:
+    elasticsearch-single:
+    image: docker.io/library/elasticsearch:7.6.2
+    container_name: elasticsearch-single
+    restart: always
+    # expose:
+    #   - 9200
+    #   - 9300
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      TZ: Asia/Shanghai
+      # es的JVM参数
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # 单节点配置，多节点集群参考 https://www.elastic.co/guide/en/elasticsearch/reference/7.6/docker.html#docker-compose-file
+      discovery.type: single-node
+      # 数据持久化路径
+    volumes:
+      - ./data:/usr/share/elasticsearch/data

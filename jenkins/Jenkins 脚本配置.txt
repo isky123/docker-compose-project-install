@@ -1,0 +1,41 @@
+#Jenkins脚本配置
+1.jenkins shell脚本配置(web前端)：
+
+node -v
+npm config set registry https://registry.npm.taobao.org
+npm install
+npm run build
+
+ssh -p30036 root@8.140.173.90 "rm -rf /opt/app/account-center/front/webapp/ctsu_app-management-web/*"
+
+scp -P30036 -r -v dist/* root@8.140.173.90:/opt/app/account-center/front/webapp/ctsu_app-management-web
+
+#ssh -p30036 root@8.140.173.90 "cd /opt/app/account-center/front; chmod -R 755 webapp/ctsu_app-management-web;docker-compose down;docker-compose up -d --build;"
+
+
+2.jenkins shell脚本配置(后端)：
+
+/var/jenkins_home/apache-maven-3.8.6/bin/mvn -Dmaven.test.failure.ignore=true clean package -pl /tslms-web/tslms-account-mgr-web -am
+
+scp -P30036 tslms-web/tslms-account-mgr-web/target/tslms-account-mgr-web.jar root@8.140.173.90:/opt/app/account-center/services/data
+
+ssh -p30036 root@8.140.173.90 "cd /opt/app/account-center/services; docker-compose up -d --build tslms-account-mgr-web ;docker-compose restart tslms-account-mgr-web;"
+
+curl 'https://oapi.dingtalk.com/robot/send?access_token=d618b878d770a1fd4bf122aadb008269a651c430ebc637d88671ef353cf7406c' \
+   -H 'Content-Type: application/json' \
+   -d '
+       {
+         "msgtype": "markdown",
+         "markdown": {
+           "title": "后端tslms-account-mgr服务部署完成",
+           "text": "## 后端tslms-account-mgr服务部署完成 \n 访问地址: http://10.15.11.4:9999/webjars/swagger-ui/index.html \n "
+         },
+         "at": {
+           "isAtAll": true
+         }
+       }
+   '
+
+
+3.jenkins系统设置：
+升级站点：http://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json   

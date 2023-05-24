@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- localRepository
+   | The path to the local repository maven will use to store artifacts.
+   |
+   | Default: ${user.home}/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+
+  <pluginGroups>
+    <!-- pluginGroup
+     | Specifies a further group identifier to use for plugin lookup.
+    <pluginGroup>com.your.plugins</pluginGroup>
+    -->
+  </pluginGroups>
+
+  <!-- proxies
+   | This is a list of proxies which can be used on this machine to connect to the network.
+   | Unless otherwise specified (by system property or command-line switch), the first proxy
+   | specification in this list marked as active will be used.
+   |-->
+  <proxies>
+    <!-- proxy
+     | Specification for one proxy, to be used in connecting to the network.
+     |
+    <proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>proxy.host.net</host>
+      <port>80</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy>
+    -->
+  </proxies>
+
+
+  <servers>
+
+	 <server>  
+      <id>maven-releases</id>  
+      <username>admin</username>  
+      <password>Sjs.379=</password>  
+    </server>  
+
+    <server>  
+      <id>maven-snapshots</id>  
+      <username>admin</username>  
+      <password>Sjs.379=</password>  
+    </server>  
+	
+  </servers>
+
+  <mirrors>
+
+    <!-- 汇总仓库 -->
+	<mirror>
+		<id>maven-public</id>
+		<name>aliyun maven</name>
+		<url> http://192.168.10.213:38081/repository/maven-public/</url>
+		<mirrorOf>central</mirrorOf>
+	</mirror>
+    <!-- 阿里central仓库 -->
+    <mirror>
+        <id>maven-alicentral</id>
+        <mirrorOf>central</mirrorOf>
+        <name>aliyun maven</name>
+        <url> http://192.168.10.213:38081/repository/maven-alicentral/</url>
+    </mirror>
+    <!-- 阿里汇总仓库 -->
+    <mirror>
+        <id>maven-central</id>
+        <mirrorOf>central</mirrorOf>
+        <name>aliyun maven</name>
+        <url> http://192.168.10.213:38081/repository/maven-central/</url>
+    </mirror>
+	
+    <!-- 中央仓库1 -->
+    <mirror>
+        <id>maven-org1</id>
+        <mirrorOf>central</mirrorOf>
+        <name>Human Readable Name for this Mirror.</name>
+        <url> http://192.168.10.213:38081/repository/maven-org1/</url>
+    </mirror>
+	
+  </mirrors>
+
+
+  <profiles>
+	<profile>  
+      <id>nexus</id>  
+	  
+      <repositories>  
+        <repository>  
+			<id>maven-releases</id>
+			<url> http://192.168.10.213:38081/repository/maven-releases</url>
+			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+        </repository>  
+
+        <repository>  
+			<id>maven-snapshots</id>
+			<url> http://192.168.10.213:38081/repository/maven-snapshots</url>
+			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+        </repository>  
+		
+		    <repository>   
+      <id>maven-org1</id>   
+      <url> http://192.168.10.213:38081/repository/maven-org1/</url>   
+	  			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+    </repository>
+
+    <repository>   
+      <id>maven-alicentral</id>  
+      <url> http://192.168.10.213:38081/repository/maven-alicentral/</url>   
+	  			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+    </repository>
+
+      </repositories>  
+      <pluginRepositories>  
+         <pluginRepository>  
+			<id>maven-releases</id>
+			<url> http://192.168.10.213:38081/repository/maven-releases</url>
+			 <releases><enabled>true</enabled></releases>  
+			 <snapshots><enabled>true</enabled></snapshots>  
+         </pluginRepository>
+		 
+         <pluginRepository>  
+				<id>maven-snapshots</id>
+				<url> http://192.168.10.213:38081/repository/maven-snapshots</url>
+                <releases><enabled>true</enabled></releases>  
+                 <snapshots><enabled>true</enabled></snapshots>  
+         </pluginRepository>  
+		 
+		 		    <pluginRepository>   
+      <id>maven-org1</id>   
+      <url> http://192.168.10.213:38081/repository/maven-org1/</url>   
+	  			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+    </pluginRepository>
+
+
+
+
+    <pluginRepository>   
+      <id>maven-alicentral</id>  
+      <url> http://192.168.10.213:38081/repository/maven-alicentral/</url>   
+	  			<releases><enabled>true</enabled></releases>  
+			<snapshots><enabled>true</enabled></snapshots>  
+    </pluginRepository>
+
+      </pluginRepositories>  
+
+    </profile>  
+
+  </profiles>
+
+
+  <activeProfiles>  
+      <activeProfile>nexus</activeProfile>  
+  </activeProfiles>
+  
+  
+  <distributionManagement>
+  <repository>
+    <id>maven-releases</id>   <!-- 注意ID部分必须要与账号密码同步 -->
+    <name>maven-releases</name>
+    <url> http://192.168.10.213:38081/repository/maven-releases</url>
+  </repository>
+  <snapshotRepository>
+    <id>maven-snapshots</id>
+    <name>maven-snapshots</name>
+    <url> http://192.168.10.213:38081/repository/maven-snapshots</url>
+  </snapshotRepository>
+</distributionManagement>
+
+</settings>
+

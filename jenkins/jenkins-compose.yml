@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins-lts
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    volumes:
+      - ./jenkins-data:/var/jenkins_home
+      - ./jenkins-data/jenkins.war:/usr/share/jenkins/jenkins.war
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: "-Dhudson.model.DownloadService.noSignatureCheck=true -Dhudson.model.UpdateCenter.updateCenterUrl=http://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/"
+    restart: always
+    privileged: true
